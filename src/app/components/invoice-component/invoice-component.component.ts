@@ -1,13 +1,37 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, effect, inject, OnInit, signal } from '@angular/core';
+import { NgClass } from '@angular/common';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
 import { Invoice } from '../../models/invoice-utils.models';
 import { InvoiceService } from '../../services/invoice.service';
 @Component({
   selector: 'app-invoice-component',
   standalone: true,
-  imports: [],
+  imports: [NgClass],
   template: `
-    <p>invoice-component works!</p>
+    <div class="table-responsive">
+      <table class="table table-striped table-hover table-bordered table-sm">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Št. Računa</th>
+            <th scope="col">Prejemnik</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (invoice of invoices(); track invoice.id) {
+            @let tdCss = { 'table-danger': invoice.expiresAt < currDate };
+            <tr
+              (click)="showInvoice(invoice)"
+              role="button">
+              <td [ngClass]="tdCss">
+                {{ invoice.invoiceNumber }}
+              </td>
+              <td [ngClass]="tdCss">{{ invoice.recipient }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -16,18 +40,29 @@ export class InvoiceComponentComponent implements OnInit {
   #destroyRef = inject(DestroyRef);
 
   invoices = signal<Invoice[]>([]);
+  currDate = new Date();
 
-  constructor() {
-    effect(() => {
-      if (this.invoices().length) {
-        console.log(this.invoices());
-      }
-    });
-  }
   ngOnInit(): void {
+    this.#fetchInvoices();
+  }
+
+  showInvoice(invoice: Invoice) {
+    console.log(invoice);
+  }
+
+  #fetchInvoices() {
     this.#invoiceService
       .getInvoices()
-      .pipe(takeUntilDestroyed(this.#destroyRef))
+      .pipe(
+        map(invoices =>
+          invoices.map((invoice: Invoice) => ({
+            ...invoice,
+            createdAt: new Date(invoice.createdAt),
+            expiresAt: new Date(invoice.expiresAt),
+          }))
+        ),
+        takeUntilDestroyed(this.#destroyRef)
+      )
       .subscribe({ next: invoices => this.invoices.set(invoices) });
   }
 }

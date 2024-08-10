@@ -1,1 +1,8 @@
-/* You can add global styles to this file, and also import other style files */
+.unstyled-button{
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  outline: inherit;
+}
