@@ -19,6 +19,7 @@ export class InvoiceDetailsComponent implements OnInit {
   selectedInvoice = signal<Invoice>(null);
   selectedIndex = signal<number>(0);
   currDate = new Date();
+
   priceSum = computed<number>(() =>
     this.selectedInvoice()
       ? this.selectedInvoice().invoiceItems?.reduce((sum, item) => sum + item.price * item.quantity, 0)

@@ -16,6 +16,7 @@ import { InvoiceDetailsComponent } from './components/invoice-details/invoice-de
           type="button"
           title="klikni za info"
           class="unstyled-button"
+          id="infoButton"
           placement="bottom"
           [ngbPopover]="popoverBody"
           [popoverTitle]="popoverTitle">
