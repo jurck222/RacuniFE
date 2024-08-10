@@ -1,5 +1,7 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, model } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { InvoiceItem } from '../../../models/invoice-utils.models';
+import { InvoiceService } from '../../../services/invoice.service';
 
 @Component({
   selector: 'app-invoice-items',
@@ -25,7 +27,11 @@ import { InvoiceItem } from '../../../models/invoice-utils.models';
               <td class="text-center">{{ item.quantity }}</td>
               <td class="text-center">{{ item.price * item.quantity }}</td>
               <td>
-                <button class="unstyled-button"><i class="fa-solid fa-trash text-secondary"></i></button>
+                <button
+                  class="unstyled-button"
+                  (click)="deleteItem(item.id)">
+                  <i class="fa-solid fa-trash text-secondary"></i>
+                </button>
               </td>
             </tr>
           }
@@ -38,5 +44,21 @@ import { InvoiceItem } from '../../../models/invoice-utils.models';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InvoiceItemsComponent {
-  invoiceItems = input.required<InvoiceItem[]>();
+  #invoiceService = inject(InvoiceService);
+  #destroyRef = inject(DestroyRef);
+  invoiceItems = model.required<InvoiceItem[]>();
+
+  deleteItem(id: number) {
+    this.#invoiceService
+      .deleteInvoiceItem(id)
+      .pipe(takeUntilDestroyed(this.#destroyRef))
+      .subscribe({
+        next: () => {
+          this.invoiceItems.update(items => {
+            return items.filter(item => item.id !== id);
+          });
+          this.#invoiceService.refetchInvoices.next();
+        },
+      });
+  }
 }

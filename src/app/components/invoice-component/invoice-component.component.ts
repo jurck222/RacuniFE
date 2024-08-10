@@ -43,7 +43,10 @@ export class InvoiceComponentComponent implements OnInit {
   currDate = new Date();
 
   ngOnInit(): void {
-    this.#invoiceService.refetchInvoices.subscribe(() => this.#fetchInvoices());
+    this.#invoiceService.refetchInvoices.subscribe(() => {
+      console.log('here');
+      this.#fetchInvoices();
+    });
     this.#invoiceService.selectNextInvoice.subscribe(index => this.showInvoice(index));
     this.#fetchInvoices();
   }

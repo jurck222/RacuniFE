@@ -16,4 +16,8 @@ export class InvoiceService {
   getInvoices() {
     return this.#http.get<Invoice[]>(`${url}Invoice`);
   }
+
+  deleteInvoiceItem(itemId: number) {
+    return this.#http.delete(`${url}InvoiceItem/${itemId}`, { responseType: 'text' });
+  }
 }
