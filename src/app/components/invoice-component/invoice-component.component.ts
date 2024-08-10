@@ -47,7 +47,7 @@ export class InvoiceComponentComponent implements OnInit {
   }
 
   showInvoice(invoice: Invoice) {
-    console.log(invoice);
+    this.#invoiceService.selectInvoice.next(invoice);
   }
 
   #fetchInvoices() {

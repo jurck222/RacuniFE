@@ -13,5 +13,5 @@ export interface Invoice {
   recipient: string;
   address: string;
   city: string;
-  items: InvoiceItem[];
+  invoiceItems: InvoiceItem[];
 }

@@ -1,0 +1,108 @@
+@if (!selectedInvoice()) {
+  <div class="text-center border"><h3 class="text-secondary p-5 ms-auto">Noben račun ni izbran</h3></div>
+} @else {
+  <div class="border rounded p-3 bg-light">
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label
+          for="stRacuna"
+          class="form-label">
+          <strong>Št. Računa:</strong>
+        </label>
+        <input
+          type="text"
+          class="form-control"
+          [ngModel]="selectedInvoice().invoiceNumber"
+          readonly />
+      </div>
+      <div class="col-md-6">
+        <label
+          for="naziv"
+          class="form-label">
+          <strong>Naziv:</strong>
+        </label>
+        <input
+          type="text"
+          id="naziv"
+          class="form-control"
+          [ngModel]="selectedInvoice().recipient"
+          readonly />
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label
+          for="datumRacuna"
+          class="form-label">
+          <strong>Datum Računa:</strong>
+        </label>
+        <input
+          type="text"
+          id="datumRacuna"
+          class="form-control"
+          [ngModel]="selectedInvoice().createdAt | date: 'dd MMM, yyyy'"
+          readonly />
+      </div>
+      <div class="col-md-6">
+        <label
+          for="naslov"
+          class="form-label">
+          <strong>Naslov:</strong>
+        </label>
+        <input
+          type="text"
+          id="naslov"
+          class="form-control"
+          [ngModel]="selectedInvoice().address"
+          readonly />
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label
+          for="valutaRacuna"
+          class="form-label">
+          <strong>Valuta Računa:</strong>
+        </label>
+        <input
+          type="text"
+          id="valutaRacuna"
+          class="form-control"
+          [ngModel]="selectedInvoice().expiresAt | date: 'dd MMM, yyyy'"
+          readonly />
+      </div>
+      <div class="col-md-6">
+        <label
+          for="kraj"
+          class="form-label">
+          <strong>Kraj:</strong>
+        </label>
+        <input
+          type="text"
+          id="kraj"
+          class="form-control"
+          [ngModel]="selectedInvoice().city"
+          readonly />
+      </div>
+    </div>
+    <div class="row mb-3"></div>
+    <div class="row mb-3">
+      <div class="col">
+        <div>
+          <label
+            for="vsota"
+            class="form-label">
+            <strong>Znesek računa:</strong>
+          </label>
+          <input
+            id="vsota"
+            type="text"
+            class="form-control text-center"
+            [ngModel]="priceSum()"
+            readonly
+            style="max-width: 100px" />
+        </div>
+      </div>
+    </div>
+  </div>
+}
