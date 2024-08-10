@@ -18,10 +18,10 @@ import { InvoiceService } from '../../services/invoice.service';
           </tr>
         </thead>
         <tbody>
-          @for (invoice of invoices(); track invoice.id) {
+          @for (invoice of invoices(); track $index) {
             @let tdCss = { 'table-danger': invoice.expiresAt < currDate };
             <tr
-              (click)="showInvoice(invoice)"
+              (click)="showInvoice($index)"
               role="button">
               <td [ngClass]="tdCss">
                 {{ invoice.invoiceNumber }}
@@ -43,11 +43,13 @@ export class InvoiceComponentComponent implements OnInit {
   currDate = new Date();
 
   ngOnInit(): void {
+    this.#invoiceService.refetchInvoices.subscribe(() => this.#fetchInvoices());
+    this.#invoiceService.selectNextInvoice.subscribe(index => this.showInvoice(index));
     this.#fetchInvoices();
   }
 
-  showInvoice(invoice: Invoice) {
-    this.#invoiceService.selectInvoice.next(invoice);
+  showInvoice(index: number) {
+    this.#invoiceService.selectInvoice.next({ item: this.invoices()[index], index });
   }
 
   #fetchInvoices() {

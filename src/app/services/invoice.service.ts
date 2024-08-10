@@ -8,8 +8,10 @@ import { url } from '../util/consts';
   providedIn: 'root',
 })
 export class InvoiceService {
-  selectInvoice = new Subject<Invoice>();
+  selectInvoice = new Subject<{ item: Invoice; index: number }>();
   refetchInvoices = new Subject<void>();
+  selectNextInvoice = new Subject<number>();
+
   #http = inject(HttpClient);
   getInvoices() {
     return this.#http.get<Invoice[]>(`${url}Invoice`);
