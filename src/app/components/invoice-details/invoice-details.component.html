@@ -68,6 +68,7 @@
           type="text"
           id="valutaRacuna"
           class="form-control"
+          [ngClass]="{ 'bg-danger': selectedInvoice().expiresAt < currDate }"
           [ngModel]="selectedInvoice().expiresAt | date: 'dd MMM, yyyy'"
           readonly />
       </div>
@@ -85,7 +86,9 @@
           readonly />
       </div>
     </div>
-    <div class="row mb-3"></div>
+    <div class="row mb-3">
+      <app-invoice-items [invoiceItems]="selectedInvoice().invoiceItems" />
+    </div>
     <div class="row mb-3">
       <div class="col">
         <div>

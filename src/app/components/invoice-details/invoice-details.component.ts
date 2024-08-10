@@ -1,13 +1,14 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, NgClass } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Invoice } from '../../models/invoice-utils.models';
 import { InvoiceService } from '../../services/invoice.service';
+import { InvoiceItemsComponent } from '../invoice-items/invoice-items.component';
 
 @Component({
   selector: 'app-invoice-details',
   standalone: true,
-  imports: [FormsModule, DatePipe],
+  imports: [FormsModule, DatePipe, InvoiceItemsComponent, NgClass],
   templateUrl: './invoice-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -15,8 +16,11 @@ export class InvoiceDetailsComponent implements OnInit {
   #invoiceService = inject(InvoiceService);
 
   selectedInvoice = signal<Invoice>(null);
+  currDate = new Date();
   priceSum = computed<number>(() =>
-    this.selectedInvoice() ? this.selectedInvoice().invoiceItems?.reduce((sum, item) => sum + item.price, 0) : 0
+    this.selectedInvoice()
+      ? this.selectedInvoice().invoiceItems?.reduce((sum, item) => sum + item.price * item.quantity, 0)
+      : 0
   );
 
   ngOnInit() {
