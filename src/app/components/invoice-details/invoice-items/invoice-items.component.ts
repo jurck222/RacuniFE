@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, model } from '@angular/core';
+import { Component, DestroyRef, inject, model } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { InvoiceItem } from '../../../models/invoice-utils.models';
+import { Invoice, InvoiceItem } from '../../../models/invoice-utils.models';
 import { InvoiceService } from '../../../services/invoice.service';
 import { ConfirmModalComponent } from '../../confirm-modal/confirm-modal.component';
 
@@ -9,7 +9,7 @@ import { ConfirmModalComponent } from '../../confirm-modal/confirm-modal.compone
   selector: 'app-invoice-items',
   standalone: true,
   template: `
-    @if (invoiceItems().length) {
+    @if (invoice()?.invoiceItems?.length) {
       <table class="table table-striped table-bordered table-hover table-sm">
         <thead class="thead-dark">
           <tr>
@@ -21,7 +21,7 @@ import { ConfirmModalComponent } from '../../confirm-modal/confirm-modal.compone
           </tr>
         </thead>
         <tbody>
-          @for (item of invoiceItems(); track $index) {
+          @for (item of invoice().invoiceItems; track $index) {
             <tr>
               <td>{{ item.itemName }}</td>
               <td>{{ item.price }}</td>
@@ -42,14 +42,13 @@ import { ConfirmModalComponent } from '../../confirm-modal/confirm-modal.compone
       <div class="text-secondary text-center mt-3"><h3>Račun nima postavk</h3></div>
     }
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InvoiceItemsComponent {
   #invoiceService = inject(InvoiceService);
   #destroyRef = inject(DestroyRef);
   #modalService = inject(NgbModal);
 
-  invoiceItems = model.required<InvoiceItem[]>();
+  invoice = model.required<Invoice>();
 
   deleteItem(invoiceItem: InvoiceItem) {
     const modalRef = this.#modalService.open(ConfirmModalComponent);
@@ -62,8 +61,11 @@ export class InvoiceItemsComponent {
             .pipe(takeUntilDestroyed(this.#destroyRef))
             .subscribe({
               next: () => {
-                this.invoiceItems.update(items => {
-                  return items.filter(item => item.id !== invoiceItem.id);
+                this.invoice.update(invoice => {
+                  return {
+                    ...invoice,
+                    invoiceItems: invoice.invoiceItems.filter(item => item.id !== invoiceItem.id),
+                  };
                 });
                 this.#invoiceService.refetchInvoices.next();
               },
