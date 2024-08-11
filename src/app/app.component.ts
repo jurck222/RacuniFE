@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
-import { InvoiceComponentComponent } from './components/invoice-component/invoice-component.component';
+import { InvoiceComponent } from './components/invoice-component/invoice.component';
 import { InvoiceDetailsComponent } from './components/invoice-details/invoice-details.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, InvoiceComponentComponent, NgbPopover, InvoiceDetailsComponent],
+  imports: [RouterOutlet, InvoiceComponent, NgbPopover, InvoiceDetailsComponent],
   template: `
     <div class="container mt-5">
       <div class="text-center">
@@ -25,7 +25,7 @@ import { InvoiceDetailsComponent } from './components/invoice-details/invoice-de
       </div>
       <div class="row mt-5">
         <div class="col-md-5">
-          <app-invoice-component />
+          <app-invoice />
         </div>
         <div class="col-md-7">
           <app-invoice-details />

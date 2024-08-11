@@ -5,7 +5,7 @@ import { map } from 'rxjs';
 import { Invoice } from '../../models/invoice-utils.models';
 import { InvoiceService } from '../../services/invoice.service';
 @Component({
-  selector: 'app-invoice-component',
+  selector: 'app-invoice',
   standalone: true,
   imports: [NgClass],
   template: `
@@ -35,7 +35,7 @@ import { InvoiceService } from '../../services/invoice.service';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InvoiceComponentComponent implements OnInit {
+export class InvoiceComponent implements OnInit {
   #invoiceService = inject(InvoiceService);
   #destroyRef = inject(DestroyRef);
 
