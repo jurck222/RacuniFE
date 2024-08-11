@@ -6,7 +6,7 @@ import { Invoice, InvoiceItem } from '../../models/invoice-utils.models';
 import { InvoiceService } from '../../services/invoice.service';
 import { InvoiceComponent } from './invoice.component';
 
-fdescribe('testing InvoiceComponent', () => {
+describe('testing InvoiceComponent', () => {
   let fixture: ComponentFixture<InvoiceComponent>;
   let component: InvoiceComponent;
   let invoiceService: InvoiceService;
