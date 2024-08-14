@@ -56,25 +56,29 @@ export class InvoiceItemsComponent {
     modalRef.result.then(
       closed => {
         if (closed) {
-          this.#invoiceService
-            .deleteInvoiceItem(invoiceItem.id)
-            .pipe(takeUntilDestroyed(this.#destroyRef))
-            .subscribe({
-              next: () => {
-                this.invoice.update(invoice => {
-                  return {
-                    ...invoice,
-                    invoiceItems: invoice.invoiceItems.filter(item => item.id !== invoiceItem.id),
-                  };
-                });
-                this.#invoiceService.refetchInvoices.next();
-              },
-            });
+          this.#delete(invoiceItem.id);
         }
       },
       () => {
         //ignore on dissmis
       }
     );
+  }
+
+  #delete(itemId: number) {
+    this.#invoiceService
+      .deleteInvoiceItem(itemId)
+      .pipe(takeUntilDestroyed(this.#destroyRef))
+      .subscribe({
+        next: () => {
+          this.invoice.update(invoice => {
+            return {
+              ...invoice,
+              invoiceItems: invoice.invoiceItems.filter(item => item.id !== itemId),
+            };
+          });
+          this.#invoiceService.refetchInvoices.next();
+        },
+      });
   }
 }
