@@ -49,7 +49,11 @@ export class InvoiceComponent implements OnInit {
   }
 
   showInvoice(index: number) {
-    this.#invoiceService.selectInvoice.next({ item: this.invoices()[index], index });
+    this.#invoiceService.selectInvoice.next({
+      item: this.invoices()[index],
+      index: index,
+      length: this.invoices().length,
+    });
   }
 
   #fetchInvoices() {

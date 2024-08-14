@@ -8,7 +8,7 @@ import { url } from '../util/consts';
   providedIn: 'root',
 })
 export class InvoiceService {
-  selectInvoice = new Subject<{ item: Invoice; index: number }>();
+  selectInvoice = new Subject<{ item: Invoice; index: number; length: number }>();
   refetchInvoices = new Subject<void>();
   selectNextInvoice = new Subject<number>();
 

@@ -13,7 +13,7 @@ import { InvoiceService } from '../../../services/invoice.service';
           <i class="fa-solid fa-backward"></i>
         </button>
       }
-      @if (selectedIndex() < itemsLength()) {
+      @if (selectedIndex() < itemsLength() - 1) {
         <button
           class="unstyled-button"
           (click)="goToNext()">

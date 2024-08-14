@@ -18,6 +18,7 @@ export class InvoiceDetailsComponent implements OnInit {
 
   selectedInvoice = signal<Invoice>(null);
   selectedIndex = signal<number>(0);
+  length = signal<number>(0);
   currDate = new Date();
 
   priceSum = computed<number>(() =>
@@ -30,6 +31,7 @@ export class InvoiceDetailsComponent implements OnInit {
     this.#invoiceService.selectInvoice.subscribe(invoice => {
       this.selectedInvoice.set(invoice.item);
       this.selectedIndex.set(invoice.index);
+      this.length.set(invoice.length);
     });
   }
 }
